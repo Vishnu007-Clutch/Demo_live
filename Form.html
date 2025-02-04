@@ -77,10 +77,12 @@
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control" id="username" placeholder="Enter your username">
+            <div class="invalid-feedback">Username is required.</div>
         </div>
-        <div class="mb-3">
+        <div class="mb-3"></div>
             <label for="email" class="form-label">Email address</label>
             <input type="email" class="form-control" id="email" placeholder="Enter your email">
+            <div class="invalid-feedback">Please enter a valid email address.</div>
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
@@ -88,10 +90,12 @@
             <small class="form-text">
                 Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.
             </small>
+            <div class="invalid-feedback">Password does not meet the requirements.</div>
         </div>
         <div class="mb-3">
             <label for="confirmPassword" class="form-label">Confirm Password</label>
             <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
+            <div class="invalid-feedback">Passwords do not match.</div>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
@@ -103,7 +107,48 @@
 <script>
     document.getElementById('signupForm').addEventListener('submit', function (event) {
         event.preventDefault();
-        alert('Form submitted successfully!');
+        
+        // Clear previous validation messages
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(input => {
+            input.classList.remove('is-invalid');
+        });
+
+        let isValid = true;
+
+        // Validate username
+        const username = document.getElementById('username');
+        if (username.value.trim() === '') {
+            username.classList.add('is-invalid');
+            isValid = false;
+        }
+
+        // Validate email
+        const email = document.getElementById('email');
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email.value.trim())) {
+            email.classList.add('is-invalid');
+            isValid = false;
+        }
+
+        // Validate password
+        const password = document.getElementById('password');
+        const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        if (!passwordPattern.test(password.value.trim())) {
+            password.classList.add('is-invalid');
+            isValid = false;
+        }
+
+        // Validate confirm password
+        const confirmPassword = document.getElementById('confirmPassword');
+        if (confirmPassword.value.trim() !== password.value.trim()) {
+            confirmPassword.classList.add('is-invalid');
+            isValid = false;
+        }
+
+        if (isValid) {
+            alert('Form submitted successfully!');
+        }
     });
 </script>
 
